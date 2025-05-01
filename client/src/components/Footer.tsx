@@ -175,13 +175,7 @@ const Footer: React.FC = () => {
         <BottomBar>
           <Copyright>
             <span>© {currentYear} Mayrink Digital Minds. Todos os direitos reservados.</span>
-            // <SocialLinks>
-              // <SocialLink href="#" aria-label="Twitter">
-                // <i className="fab fa-twitter"></i>
-              // </SocialLink>
-              // <SocialLink href="#" aria-label="Linkedin">
-                // <i className="fab fa-linkedin"></i>
-              // </SocialLink>
+            <SocialLinks>
               <SocialLink href="https://www.instagram.com/mayrink.digitalminds/" aria-label="Instagram">
                 <i className="fab fa-instagram"></i>
               </SocialLink>
