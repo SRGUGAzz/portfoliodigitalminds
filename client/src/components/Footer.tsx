@@ -174,15 +174,15 @@ const Footer: React.FC = () => {
 
         <BottomBar>
           <Copyright>
-            <span>© {currentYear} NexusAI. Todos os direitos reservados.</span>
-            <SocialLinks>
-              <SocialLink href="#" aria-label="Twitter">
-                <i className="fab fa-twitter"></i>
-              </SocialLink>
-              <SocialLink href="#" aria-label="Linkedin">
-                <i className="fab fa-linkedin"></i>
-              </SocialLink>
-              <SocialLink href="#" aria-label="Instagram">
+            <span>© {currentYear} Mayrink Digital Minds. Todos os direitos reservados.</span>
+            # <SocialLinks>
+              # <SocialLink href="#" aria-label="Twitter">
+                # <i className="fab fa-twitter"></i>
+              # </SocialLink>
+              # <SocialLink href="#" aria-label="Linkedin">
+                # <i className="fab fa-linkedin"></i>
+              # </SocialLink>
+              <SocialLink href="https://www.instagram.com/mayrink.digitalminds/" aria-label="Instagram">
                 <i className="fab fa-instagram"></i>
               </SocialLink>
               <SocialLink href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
@@ -191,8 +191,8 @@ const Footer: React.FC = () => {
             </SocialLinks>
           </Copyright>
           <BottomLinks>
-            <BottomLink href="#">Política de Privacidade</BottomLink>
-            <BottomLink href="#">Termos de Uso</BottomLink>
+            <BottomLink href="https://sites.google.com/view/mdm-politica-de-privacidade/">Política de Privacidade</BottomLink>
+            <BottomLink href="https://sites.google.com/view/mdm-termos-de-cond-uso/">Termos de Uso</BottomLink>
           </BottomLinks>
         </BottomBar>
       </FooterContainer>
