@@ -1,6 +1,16 @@
 # Estágio de build
 FROM node:20-alpine AS builder
 
+# Argumentos de build para VITE_* — precisam estar no builder pois o Vite embute em tempo de compilação
+ARG VITE_LOGO_URL
+ARG VITE_WEBHOOK_URL
+ARG VITE_WHATSAPP_NUMBER
+
+# Expor para o processo do Vite durante o build
+ENV VITE_LOGO_URL=${VITE_LOGO_URL}
+ENV VITE_WEBHOOK_URL=${VITE_WEBHOOK_URL}
+ENV VITE_WHATSAPP_NUMBER=${VITE_WHATSAPP_NUMBER}
+
 # Diretório de trabalho
 WORKDIR /app
 
@@ -13,7 +23,7 @@ RUN npm install
 # Copiar o restante do código fonte
 COPY . .
 
-# Compilar o frontend com npx 
+# Compilar o frontend com npx
 # O vite.config.ts está configurado para gerar os arquivos em dist/public
 RUN npx vite build
 
