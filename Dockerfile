@@ -1,5 +1,5 @@
 # Estágio de build
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Diretório de trabalho
 WORKDIR /app
@@ -36,7 +36,7 @@ RUN echo "Conteúdo do diretório dist/public:"
 RUN ls -la dist/public/
 
 # Estágio de produção
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Argumentos de build para variáveis de ambiente (preenchidos pelo comando docker build --build-arg)
 ARG VITE_LOGO_URL
