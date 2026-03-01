@@ -1,24 +1,25 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-// Hook para gerenciar o sessionID
-export const useSessionId = () => {
+// Hook para gerenciar o sessionID (por agente, para evitar histórico cruzado)
+export const useSessionId = (agentName?: string) => {
   const [sessionId, setSessionId] = useState<string>('');
-  
+
   useEffect(() => {
-    // Verifica se já existe um sessionId no localStorage
-    let id = localStorage.getItem('nexusai_session_id');
-    
-    // Se não existir, cria um novo e salva no localStorage
+    const key = agentName
+      ? `nexusai_session_id_${agentName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w]/g, '_')}`
+      : 'nexusai_session_id';
+
+    let id = localStorage.getItem(key);
     if (!id) {
       id = uuidv4();
-      localStorage.setItem('nexusai_session_id', id);
+      localStorage.setItem(key, id);
     }
-    
-    console.log('Session ID:', id);
+
+    console.log('Session ID:', id, '| Agent:', agentName || 'global');
     setSessionId(id);
-  }, []);
-  
+  }, [agentName]);
+
   return sessionId;
 };
 

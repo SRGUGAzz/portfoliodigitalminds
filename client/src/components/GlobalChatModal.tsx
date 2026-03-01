@@ -481,8 +481,23 @@ const MessageContent: React.FC<MessageContentProps> = ({ message }) => {
       );
 
     case "text":
-    default:
-      return <div className="message-content-text">{text}</div>;
+    default: {
+      const html = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/^#{1,3} (.+)$/gm, '<strong>$1</strong>')
+        .replace(/^\* (.+)$/gm, '• $1')
+        .replace(/\n/g, '<br>');
+      return (
+        <div
+          className="message-content-text"
+          style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      );
+    }
   }
 };
 
@@ -735,7 +750,7 @@ const GlobalChatModal: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageIdCounter = useRef(1);
   const webhookUrl = useWebhookUrl();
-  const sessionId = useSessionId();
+  const sessionId = useSessionId(agentName);
 
   // Estado para gravar áudio
   const {
@@ -870,6 +885,11 @@ const GlobalChatModal: React.FC = () => {
         ) {
           messages = responseData.messages;
           console.log("Formato 3 detectado (audio):", messages);
+        }
+        // Formato 4: {message: "texto"} — resposta direta do Gemini
+        else if (responseData?.message && typeof responseData.message === "string") {
+          messages = [{ message: responseData.message, typeMessage: "text" }];
+          console.log("Formato 4 detectado (audio):", messages);
         }
 
         // Processa cada mensagem da resposta com delay entre elas
@@ -1051,6 +1071,11 @@ const GlobalChatModal: React.FC = () => {
         ) {
           messages = responseData.messages;
           console.log("Formato 3 detectado:", messages);
+        }
+        // Formato 4: {message: "texto"} — resposta direta do Gemini
+        else if (responseData?.message && typeof responseData.message === "string") {
+          messages = [{ message: responseData.message, typeMessage: "text" }];
+          console.log("Formato 4 detectado:", messages);
         }
 
         // Processa cada mensagem da resposta com delay entre elas
