@@ -112,29 +112,9 @@ RUN echo "SESSION_SECRET=$SESSION_SECRET" >> .env
 # Expor a porta padrão
 EXPOSE 5000
 
-# Instalar ts-node como fallback para inicialização alternativa
-RUN npm install -g ts-node typescript
-
-# Criar script shell para tentar diferentes entrypoints
-RUN echo '#!/bin/sh\n\
-echo "Tentando inicialização direta do index.js com Node.js..."\n\
-NODE_ENV=production node --experimental-specifier-resolution=node --experimental-modules --experimental-json-modules dist/index.js || {\n\
-  echo "Falha na inicialização direta, tentando com entrypoint.cjs..."\n\
-  node entrypoint.cjs || {\n\
-    echo "Falha com entrypoint.cjs, tentando com entrypoint.mjs..."\n\
-    node entrypoint.mjs || {\n\
-      echo "Falha com entrypoint.mjs, tentando inicialização com script simples..."\n\
-      node start-simple.js || {\n\
-        echo "Falha com script simples, tentando inicialização emergencial..."\n\
-        cd /app && npm install ts-node typescript -g && npx ts-node server/index.ts || {\n\
-          echo "Todas as tentativas falharam. Verifique os logs acima para detalhes."\n\
-          exit 1\n\
-        }\n\
-      }\n\
-    }\n\
-  }\n\
-}' > /app/start.sh
+# Copiar e tornar executável o script de inicialização
+COPY start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
-# Iniciar a aplicação com script shell que tenta múltiplos entrypoints
+# Iniciar a aplicação
 CMD ["/app/start.sh"]
