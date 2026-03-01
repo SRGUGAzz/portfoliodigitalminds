@@ -79,9 +79,9 @@ WORKDIR /app
 # Copiar package.json e package-lock.json
 COPY package*.json ./
 
-# Instalar dependências de produção e também o Vite (necessário em tempo de execução)
-RUN npm install --production
-RUN npm install vite
+# Instalar todas as dependências incluindo devDeps (vite é devDep mas importado em runtime)
+# NODE_ENV=production faz npm skip devDeps — forçamos com --include=dev
+RUN npm install --include=dev
 
 # Criar estrutura de diretórios necessária
 RUN mkdir -p dist/public server/public shared
@@ -112,9 +112,9 @@ RUN echo "SESSION_SECRET=$SESSION_SECRET" >> .env
 # Expor a porta padrão
 EXPOSE 5000
 
-# Copiar e tornar executável o script de inicialização
+# Copiar e tornar executável o script de inicialização (converte CRLF→LF do Windows)
 COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+RUN sed -i 's/\r//' /app/start.sh && chmod +x /app/start.sh
 
 # Iniciar a aplicação
 CMD ["/app/start.sh"]
