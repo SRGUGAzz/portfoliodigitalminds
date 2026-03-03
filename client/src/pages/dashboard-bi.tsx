@@ -473,12 +473,14 @@ function CustomBarTooltip({ active, payload, label }: any) {
   );
 }
 
-function CustomPieTooltip({ active, payload }: any) {
+function CustomPieTooltip({ active, payload, totalRecords }: any) {
   if (!active || !payload?.length) return null;
+  const val = payload[0].value;
+  const pct = totalRecords > 0 ? ((val / totalRecords) * 100).toFixed(1) : "0.0";
   return (
     <CustomTooltipWrapper>
       <div style={{ fontWeight: 600, marginBottom: 2 }}>{payload[0].name}</div>
-      <div>{payload[0].value} ({(payload[0].percent * 100).toFixed(1)}%)</div>
+      <div>{val} ({pct}%)</div>
     </CustomTooltipWrapper>
   );
 }
@@ -710,7 +712,7 @@ export default function DashboardBIPage() {
                         <Cell key={i} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip content={<CustomPieTooltip />} />
+                    <Tooltip content={<CustomPieTooltip totalRecords={stats.total} />} />
                     <Legend
                       verticalAlign="bottom"
                       iconType="circle"
