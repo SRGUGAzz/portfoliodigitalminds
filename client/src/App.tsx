@@ -15,12 +15,20 @@ import DashboardPage from "./pages/admin/dashboard-page";
 import AgentsPage from "./pages/admin/agents-page";
 import PromptsPage from "./pages/admin/prompts-page";
 
+// Dashboard BI pages
+import DashboardLoginPage from "./pages/dashboard-login";
+import DashboardBIPage from "./pages/dashboard-bi";
+
 function Router() {
   return (
     <Switch>
       {/* Public routes */}
       <Route path="/" component={Home} />
       <Route path="/admin/login" component={LoginPage} />
+
+      {/* Dashboard BI routes (auth própria via localStorage) */}
+      <Route path="/dashboard/login" component={DashboardLoginPage} />
+      <Route path="/dashboard" component={DashboardBIPage} />
       
       {/* Admin root redirects to dashboard or login */}
       <Route path="/admin" component={AdminIndexPage} />

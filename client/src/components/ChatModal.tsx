@@ -260,6 +260,7 @@ interface Message {
 const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, agentName, agentIcon }) => {
   const webhookUrl = useWebhookUrl();
   const sessionId = useSessionId();
+  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -338,6 +339,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, agentName, agent
     console.log('Modal individual: Enviando mensagem com sessionId:', sessionId);
     
     // Envia requisição HTTP POST para o webhook
+    setIsLoading(true);
     fetch(webhookUrl, {
       method: 'POST',
       headers: {
@@ -345,41 +347,31 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, agentName, agent
       },
       body: JSON.stringify(webhookPayload),
     })
-    .then(response => {
-      console.log('Webhook response:', response.status);
-      // Simula a resposta do agente após receber confirmação do webhook
-      setTimeout(() => {
-        const agentResponses = [
-          `Como posso ajudar você com ${agentName}?`,
-          `Tenho várias opções para atender suas necessidades de ${agentName}.`,
-          `Posso oferecer soluções personalizadas para ${agentName}.`,
-          `Deixe-me mostrar como nosso serviço de ${agentName} pode beneficiar você.`
-        ];
-        
-        const randomResponse = agentResponses[Math.floor(Math.random() * agentResponses.length)];
-        
-        const newAgentMessage: Message = {
-          id: messageIdCounter.current++,
-          text: randomResponse,
-          isUser: false,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          createdAt: Date.now()
-        };
-        
-        setMessages(prev => [...prev, newAgentMessage]);
-      }, 1000);
+    .then(response => response.json())
+    .then(responseData => {
+      const text = responseData?.message || responseData?.output || responseData?.[0]?.message;
+      const newAgentMessage: Message = {
+        id: messageIdCounter.current++,
+        text: text || 'Desculpe, não consegui processar sua mensagem.',
+        isUser: false,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        createdAt: Date.now()
+      };
+      setMessages(prev => [...prev, newAgentMessage]);
     })
     .catch(error => {
       console.error('Erro ao enviar para o webhook:', error);
-      // Mensagem de erro caso a requisição falhe
       const errorMessage: Message = {
         id: messageIdCounter.current++,
-        text: `Desculpe, estamos com dificuldades técnicas. Por favor, tente novamente mais tarde.`,
+        text: 'Desculpe, estamos com dificuldades técnicas. Por favor, tente novamente mais tarde.',
         isUser: false,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         createdAt: Date.now()
       };
       setMessages(prev => [...prev, errorMessage]);
+    })
+    .finally(() => {
+      setIsLoading(false);
     });
     
     setInputValue('');
@@ -412,6 +404,14 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, agentName, agent
               </BubbleContainer>
             </MessageWrapper>
           ))}
+          {isLoading && (
+            <MessageWrapper $isUser={false}>
+              <BubbleContainer $isUser={false}>
+                Digitando...
+                <MessageTime>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</MessageTime>
+              </BubbleContainer>
+            </MessageWrapper>
+          )}
           <div ref={messagesEndRef} />
         </ChatArea>
         
@@ -421,9 +421,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, agentName, agent
             placeholder="Digite sua mensagem..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
+            disabled={isLoading}
           />
-          <SendButton onClick={handleSendMessage}>
+          <SendButton onClick={handleSendMessage} disabled={isLoading} style={{ opacity: isLoading ? 0.5 : 1 }}>
             <i className="fas fa-paper-plane"></i>
           </SendButton>
         </InputArea>
