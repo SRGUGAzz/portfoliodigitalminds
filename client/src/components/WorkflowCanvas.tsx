@@ -319,8 +319,8 @@ const CanvasArea = styled.div`
   position: relative;
   cursor: grab;
   /* n8n dot grid pattern */
-  background-color: #fafafa;
-  background-image: radial-gradient(circle, #d4d4d4 1px, transparent 1px);
+  background-color: #0a0a0a;
+  background-image: radial-gradient(circle, #ffffff30 1px, transparent 1px);
   background-size: 24px 24px;
 
   &:active { cursor: grabbing; }
@@ -403,7 +403,7 @@ const InputDot = styled.div`
   height: 8px;
   border-radius: 50%;
   background: #d0d0d8;
-  border: 2px solid #fafafa;
+  border: 2px solid #0a0a0a;
 `;
 
 const OutputDot = styled.div`
@@ -415,7 +415,7 @@ const OutputDot = styled.div`
   height: 8px;
   border-radius: 50%;
   background: #d0d0d8;
-  border: 2px solid #fafafa;
+  border: 2px solid #0a0a0a;
 `;
 
 /* ── Zoom Controls (n8n style) ── */
