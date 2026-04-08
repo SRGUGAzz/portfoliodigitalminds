@@ -12,3 +12,10 @@ node_modules/@aios/
 outputs/minds/
 .aios-installation-config.yaml
 # End AIOS-FullStack auto-managed section
+
+# Workflow exports e scripts auxiliares
+portfolio_workflow_*.json
+fix_*.py
+insert_agents.py
+update_workflow.py
+.aios-pm-config.yaml
