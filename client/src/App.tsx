@@ -19,12 +19,18 @@ import PromptsPage from "./pages/admin/prompts-page";
 import DashboardLoginPage from "./pages/dashboard-login";
 import DashboardBIPage from "./pages/dashboard-bi";
 
+// Workflow viewer
+import WorkflowViewer from "./pages/workflow-viewer";
+
 function Router() {
   return (
     <Switch>
       {/* Public routes */}
       <Route path="/" component={Home} />
       <Route path="/admin/login" component={LoginPage} />
+
+      {/* Workflow viewer */}
+      <Route path="/workflow" component={WorkflowViewer} />
 
       {/* Dashboard BI routes (auth própria via localStorage) */}
       <Route path="/dashboard/login" component={DashboardLoginPage} />
