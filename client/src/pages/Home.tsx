@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import AgentGrid from '../components/AgentGrid';
-import WorkflowSection from '../components/WorkflowSection';
 import Features from '../components/Features';
 import CTA from '../components/CTA';
 import Footer from '../components/Footer';
@@ -28,7 +27,6 @@ const Home: React.FC = () => {
       <Header />
       <Hero />
       <AgentGrid />
-      <WorkflowSection />
       <Features />
       <CTA />
       <Footer />
