@@ -15,7 +15,7 @@ function normalizePositions(nodes: WorkflowNode[]) {
   const minX = Math.min(...nodes.map(n => n.position[0]));
   const minY = Math.min(...nodes.map(n => n.position[1]));
   const PADDING = 200;
-  const SCALE = 0.55;
+  const SCALE = 0.75;
 
   return nodes.map(n => ({
     ...n,
